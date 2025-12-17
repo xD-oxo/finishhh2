@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Talaaaa</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+            /* ==========================================================================
+               1. 滑動軌道核心設定 (修正版面崩壞與循環問題)
+               ========================================================================== */
+			.sliding-wrapper {
+				overflow: hidden;
+				width: 100%;
+				position: relative; /* 讓加速按鈕可以定位 */
+			}
+
+			.sliding-track {
+				display: flex;
+				flex-wrap: nowrap !important; /* 【絕對關鍵】強制不准換行，防止變直排 */
+				width: 300%;                  /* 因為有 3 組圖，所以總寬度是 300% */
+				animation: scroll-seamless 25s linear infinite; 
+			}
+
+			/* 強制設定每個格子的寬度 */
+            /* 我們有 3 組，每組 4 張，總共 12 張圖。 100% / 12 = 8.3333% */
+			.sliding-track .col-4 {
+				width: 8.3333% !important; 
+				flex-shrink: 0;
+				padding: 0 1em; /* 左右留白 */
+			}
+
+/* --- 終極修正版：首頁滑動圖片 --- */
+			.sliding-track .image img {
+				display: block;
+				width: 100%;         
+				
+				/* 1. 關鍵修改：高度加倍！給玩偶足夠的空間站起來 */
+				height: 200px;       
+				
+				/* 2. 關鍵修改：使用 contain 讓整隻玩偶都看得到，絕對不切頭 */
+				object-fit: cover; 
+				
+				
+				/* 3. 卡片風格：白色背景 + 內縮一點點 */
+				background-color: #ffffff; 
+				padding: 10px;       
+				
+				/* 4. 讓玩偶乖乖站在正中間 */
+				object-position: top center;
+			}
+
+			/* 讓格子瘦身，去除多餘留白 */
+			.sliding-track .box.feature .inner {
+				padding: 1em 1em 1.5em 1em !important; 
+				min-height: auto; 
+			}
+            
+            /* 移除 box 底部的預設留白 */
+            .box.feature.no-padding-bottom {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+            .image.featured { margin: 0 !important; }
+
+			/* 縮小文字，讓小格子看起來協調 */
+			.sliding-track .box.feature h2 {
+				font-size: 1.1em !important; 
+				margin-bottom: 0.2em;        
+			}
+			.sliding-track .box.feature p {
+				font-size: 0.85em !important; 
+				margin-bottom: 0.5em;         
+			}
+
+            /* ==========================================================================
+               3. 動畫邏輯 (無縫循環)
+               ========================================================================== */
+            /* 讓圖片往右跑：從 "第2組"(-33.33%) 的位置 滑到 "第1組"(0%) */
+            /* 因為第1組和第2組長得一模一樣，所以跳回去時眼睛看不出來 */
+			@keyframes scroll-seamless {
+				0% { transform: translateX(-33.33%); } 
+				100% { transform: translateX(0); }     
+			}
+
+			/* 滑鼠移上去時暫停 */
+			.sliding-track:hover {
+				animation-play-state: paused;
+			}
+
+            /* ==========================================================================
+               4. 加速按鈕樣式
+               ========================================================================== */
+			.nav-arrow {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 10;
+				background: rgba(0, 0, 0, 0.6);
+				color: #fff;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 50px;
+				cursor: pointer;
+				transition: background 0.3s;
+				font-size: 1.2em;
+			}
+			.nav-arrow:hover { background: rgba(255, 0, 0, 0.8); }
+			.right-arrow { right: 10px; } /* 固定在右邊 */
+
+            /* ==========================================================================
+               5. 其他頁面樣式 (側邊欄、隱藏文字等)
+               ========================================================================== */
+			.widget.thumbnails .image img {
+				width: 100%;
+				height: 150px;
+				object-fit: cover;
+				object-position: top;
+			}
+			.scary-text {
+				color: black; background-color: black; display: inline-block; padding: 0 5px;
+			}
+			.scary-text::selection {
+				color: #ff0000; background-color: black;
+			}
+			.scary-text::-moz-selection {
+				color: #ff0000; background-color: black;
+			}
+			/* 圖片設定：改成「完整顯示」並加上「強制白底」 */
+            .char-image img {
+                width: 100%;
+                height: 350px;       /* 高度固定 */
+                
+                /* --- 關鍵修改 --- */
+                object-fit: contain; /* 改成 contain：讓玩偶完整縮小塞進去，不會被切頭，旁邊自動留白 */
+                background-color: #ffffff; /* 強制背景要是純白色 (這樣透明PNG也會有白底) */
+                padding: 20px;       /* (選用) 讓玩偶縮進去一點，不要頂到邊邊，看起來更有質感 */
+                
+                object-position: center; /* 讓玩偶置中 */
+                border-radius: 6px 6px 0 0; 
+            }
+		</style>
+	</head>
+	<body class="is-preload homepage">
+		<div id="page-wrapper">
+
+			<div id="header-wrapper">
+					<header id="header" class="container">
+
+						<div id="logo">
+								<h1><a href="index.html">News</a></h1>
+							</div>
+
+						<nav id="nav">
+								<ul>
+									<li class="current"><a href="index.html">Welcome</a></li>
+									<li>
+										<a href="PPT charactors.html">Poppy Playtime</a>
+										<ul>
+											<li><a href="buy huggy.html">Huggy Wuggy</a></li>
+											<li><a href="#">Kissy Missy</a></li>
+											<li><a href="#">Poppy</a></li>
+											<li><a href="#">Mommy long Legs</a></li>
+											<li><a href="buy catnap.html">CatNap</a></li>
+											<li><a href="#">DogDay</a></li>
+											<li><a href="#">PickyPiggy</a></li>
+											<li><a href="#">Bobby BearHug</a></li>
+											<li><a href="#">Bubba Bubbaphant</a></li>
+											<li><a href="#">CraftyCorn</a></li>
+											<li><a href="#">Hoppy Hopscotch</a></li>
+											<li><a href="#">KickinChickin</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="charactors fnaf.html">Five Nights at Freddy's</a>
+										<ul>
+											<li><a href="#">Freddy</a></li>
+											<li><a href="#">Bonnie</a></li>
+											<li><a href="#">Chica</a></li>
+											<li><a href="buy foxy.html">Foxy</a></li>
+											<li><a href="#">Golden Freddy</a>
+											<li><a href="#">Endo-01</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="DD charactors.html">Dark Deception</a>
+										<ul>
+											<li><a href="#">Murder Monkeys</a></li>
+											<li><a href="#">Dread Duckies</a></li>
+											<li><a href="buy nurrse.html">Reaper Nurses5</a></li>
+											<li><a href="#">Agatha</a></li>
+											<li><a href="#">Malak</a></li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+					</header>
+				</div>
+
+			<div id="banner-wrapper">
+					<div id="banner" class="box container">
+						<div class="row">
+							<div class="col-7 col-12-medium">
+								<h2>Hi 歡迎到玩偶店</h2>
+								<p style="font-size: 1.5em;">這是一間以領養代替購買的玩偶網站。</p>
+							</div>
+							<div class="col-5 col-12-medium">
+								<ul>
+									<li><a href="#features-wrapper" class="button large icon solid fa-arrow-circle-right">Ok let's go</a></li>
+									<li><a href="more info.html" class="button alt large icon solid fa-question-circle">More info</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<div id="features-wrapper">
+					<div class="container sliding-wrapper"> 
+                        
+                        <div class="nav-arrow right-arrow" id="btn-fast">
+                            <i class="fas fa-forward"></i>
+                        </div>
+
+                        <div class="row sliding-track">
+                            
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+                                    <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
+									<div class="inner">
+										<header>
+											<h2>Smiling Critters</h2>
+											<p>Ohhh look at that cuteeeee animals !!</p>
+										</header>
+										<p>Shhhhhhh.</p>
+									</div>
+								</section>
+							</div>
+
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
+									<div class="inner">
+										<header>
+											<h2>Huggy Wuggy</h2>
+											<p>PLS Huggg me !!</p>
+										</header>
+										<p>Becare for the sharp teeth.</p>
+									</div>
+								</section>
+							</div>
+
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
+									<div class="inner">
+										<header>
+											<h2>Oh, that's chica...</h2>
+											<p>You want some cake?</p>
+										</header>
+										<p>Sayyyy YESSSSssssss...</p>
+									</div>
+								</section>
+							</div>
+
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
+									<div class="inner">
+										<header>
+											<h2>Caution the needle...</h2>
+											<p>Don't afraid...</p>
+										</header>
+										<p>Just a beautiful nurse...</p>
+									</div>
+								</section>
+							</div>
+
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+                                    <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
+									<div class="inner">
+										<header>
+											<h2>Smiling Critters</h2>
+											<p>Ohhh look at that cuteeeee animals !!</p>
+										</header>
+										<p>Shhhhhhh.</p>
+									</div>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
+									<div class="inner">
+										<header>
+											<h2>Huggy Wuggy</h2>
+											<p>PLS Huggg me !!</p>
+										</header>
+										<p>Becare for the sharp teeth.</p>
+									</div>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
+									<div class="inner">
+										<header>
+											<h2>Oh, that's chica...</h2>
+											<p>You want some cake?</p>
+										</header>
+										<p>Sayyyy YESSSSssssss...</p>
+									</div>
+								</section>
+							</div>
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
+									<div class="inner">
+										<header>
+											<h2>Caution the needle...</h2>
+											<p>Don't afraid...</p>
+										</header>
+										<p>Just a beautiful nurse...</p>
+									</div>
+								</section>
+							</div>
+
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+                                    <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
+									<div class="inner">
+										<header>
+											<h2>Smiling Critters</h2>
+											<p>Ohhh look at that cuteeeee animals !!</p>
+										</header>
+										<p>Shhhhhhh.</p>
+									</div>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
+									<div class="inner">
+										<header>
+											<h2>Huggy Wuggy</h2>
+											<p>PLS Huggg me !!</p>
+										</header>
+										<p>Becare for the sharp teeth.</p>
+									</div>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
+									<div class="inner">
+										<header>
+											<h2>Oh, that's chica...</h2>
+											<p>You want some cake?</p>
+										</header>
+										<p>Sayyyy YESSSSssssss...</p>
+									</div>
+								</section>
+							</div>
+                            <div class="col-4 col-12-medium">
+								<section class="box feature no-padding-bottom">
+									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
+									<div class="inner">
+										<header>
+											<h2>Caution the needle...</h2>
+											<p>Don't afraid...</p>
+										</header>
+										<p>Just a beautiful nurse...</p>
+									</div>
+								</section>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			<div id="main-wrapper">
+					<div class="container">
+						<div class="row gtr-200">
+							<div class="col-4 col-12-medium">
+
+								<div id="sidebar">
+										<section class="widget thumbnails">
+											<h3>其他 你可能有興趣的玩偶......</h3>
+											<div class="grid">
+												<div class="row gtr-50">
+													<div class="col-6"><a href="#" class="image fit"><img src="images/Killy.jpg" alt="" /></a></div>
+													<div class="col-6"><a href="#" class="image fit"><img src="images/Dread_Ducky.jpg" alt="" /></a></div>
+													<div class="col-6"><a href="#" class="image fit"><img src="images/FNaF-Bonnie-Character.png" alt="" /></a></div>
+													<div class="col-6"><a href="#" class="image fit"><img src="images/Bunzo.jpg" alt="" /></a></div>
+												</div>
+											</div>
+											<a href="no more.html" class="button icon fa-file-alt">More</a>
+										</section>
+									</div>
+
+							</div>
+							<div class="col-8 col-12-medium imp-medium">
+
+								<div id="content">
+										<section class="last">
+											<h2>So 這個網站是怎麼一回事?</h2>
+											<p>這是由 <strong>⏹︎⏹︎⏹︎⏹︎•⏹︎⏹︎⏹︎⏹︎⏹︎、⏹︎⏹︎⏹︎⏹︎•⏹︎⏹︎、⏹︎⏹︎•⏹︎⏹︎⏹︎ </strong>三位所合作創立的玩偶店,而他們先前早已創立了　　　　　　<a href="https://poppyplaytime.com/pages/play-the-game">Poppy Playtime</a>、 <a href="https://fnafofficial.com/">Five Nights at Freddy's、 <a href="https://dark-deception-game.fandom.com/wiki/Dark_Deception_Wiki">Dark Deception</a> 三家知名吉祥物公司。
+												這次他們決定將這些可愛的玩偶們帶到現實生活中,讓更多人能夠認識並且領養這些玩偶們。</p>
+											<p class="scary-text">鄭重警告： 這些玩偶並不會在您不注意的時候移動,也不會在您睡眠期間盯著您。</p>
+											<a href="#" class="button icon solid fa-arrow-circle-right">Continue Reading</a>
+										</section>
+									</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<div id="footer-wrapper">
+					<footer id="footer" class="container">
+						<div class="row">
+							<div class="col-3 col-6-medium col-12-small">
+
+								<section class="widget links">
+										<h3>合作公司</h3>
+										<ul class="style2">
+											<li><a href="https://poppyplaytime.com/pages/play-the-game">Poppy Playtime</a></li>
+											<li><a href="https://fnafofficial.com/">Five Nights at Freddy’s</a></li>
+											<li><a href="https://dark-deception-game.fandom.com/wiki/Dark_Deception_Wiki">Dark Deception</a></li>
+										</ul>
+									</section>
+
+							</div>
+							<div class="col-3 col-6-medium col-12-small">
+
+								<section class="widget links">
+										<h3>網頁製作者</h3>
+										<ul class="style2">
+											<li><a href="https://xd-oxo.github.io/finish/">阿幻幻大帥哥</a></li>
+											<li><a href="https://xd-oxo.github.io/finish/">和他的腦袋</a></li>
+											<li><a href="https://xd-oxo.github.io/finish/">和喜歡的遊戲</a></li>
+											<li><a href="https://xd-oxo.github.io/finish/">和想推薦大家遊玩的心</a></li>
+											<li><a href="#">哈哈其實我哪一款都不敢玩QQ</a></li>
+										</ul>
+									</section>
+
+							</div>
+							<div class="col-3 col-6-medium col-12-small">
+
+								<section class="widget links">
+										<h3>事實上能購買的是</h3>
+										<ul class="style2">
+											<li><a href="#">Huggy</a></li>
+											<li><a href="#">Catnap</a></li>
+											<li><a href="#">Foxy</a></li>
+											<li><a href="#">還有那超正的Nurse</a></li>
+											<li><a href="#">一定要點加進購物車看看彈窗!!</a></li>
+										</ul>
+									</section>
+
+							</div>
+							<div class="col-3 col-6-medium col-12-small">
+
+								<section class="widget contact last">
+										<h3>聯絡我們</h3>
+										<ul>
+											<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+											<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+											<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+											<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+											<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+										</ul>
+										<p>666 Road<br />
+										Arcadia, TW 9999999<br />
+										(08) 24696303</p>
+									</section>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div id="copyright">
+									<ul class="menu">
+										<li>&copy; THAT COOL GUY DO THIS.</li><li>Design: <a>HUANNNN.</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</footer>
+				</div>
+
+			</div>
+
+		<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+            
+<script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const track = document.querySelector('.sliding-track');
+                    const btnFast = document.getElementById('btn-fast');
+
+                    // 檢查元素是否存在
+                    if (btnFast && track) {
+                        
+                        // 定義加速與恢復的函式
+                        function speedUp() {
+                            // 抓取軌道上目前正在跑的所有動畫
+                            const animations = track.getAnimations();
+                            animations.forEach(animation => {
+                                // 將播放速率改成 5 倍速 (原本是 1)
+                                animation.updatePlaybackRate(5); 
+                            });
+                        }
+
+                        function slowDown() {
+                            const animations = track.getAnimations();
+                            animations.forEach(animation => {
+                                // 將播放速率改回 1 倍速 (正常速度)
+                                animation.updatePlaybackRate(1); 
+                            });
+                        }
+
+                        // === 綁定滑鼠事件 ===
+                        // 滑鼠按住 -> 加速
+                        btnFast.addEventListener('mousedown', speedUp);
+                        // 滑鼠放開 -> 恢復
+                        btnFast.addEventListener('mouseup', slowDown);
+                        // 滑鼠移開 -> 恢復 (避免卡住)
+                        btnFast.addEventListener('mouseleave', slowDown);
+                        
+                        // === 綁定手機觸控事件 ===
+                        btnFast.addEventListener('touchstart', function(e) {
+                            e.preventDefault(); // 防止手機長按跳出選單
+                            speedUp();
+                        });
+                        btnFast.addEventListener('touchend', slowDown);
+                    }
+                });
+            </script>
+	</body>
+</html>

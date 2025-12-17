@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>玩偶詳細資訊 - 玩偶店</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+            /* 針對這個頁面的微調樣式 */
+            
+/* 商品圖片設定：縮小並限制最大寬度 */
+            .product-image img {
+                width: 100%;         /* 手機版時會自動縮小 */
+                max-width: 380px;    /* <--- 關鍵修改：限制最大寬度*/
+                height: auto;        /* 高度自動，保持比例不裁切 */
+                
+                display: block;      /* 區塊顯示 */
+                margin: 0 auto;      /* 置中 */
+                
+                border-radius: 8px;  /* 圓角 */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 陰影 */
+            }
+
+            /* 價格的樣式 */
+            .product-price {
+                font-size: 2em;
+                font-weight: bold;
+                color: #d63031; 
+                margin: 20px 0;
+            }
+			/* 原本的價格：讓它變灰色並畫刪除線 */
+            .original-price {
+                text-decoration: line-through; /* 刪除線 */
+                color: #888;                   /* 灰色 */
+                font-size: 1.5em;              /* 字體不用太大 */
+                margin-bottom: 0;
+            }
+
+            /* 新的特價 0 元：超級大、紅色 */
+            .free-price {
+                font-size: 4em;      /* 超級大字 */
+                font-weight: 900;    /* 最粗體 */
+                color: #ff0000;      /* 鮮紅色 */
+                line-height: 1.2em;  /* 行高調整 */
+                margin-bottom: 20px; /* 跟下面的按鈕保持距離 */
+                
+                /* 加一點文字陰影讓它更突出 (可選) */
+                text-shadow: 2px 2px 0px rgba(0,0,0,0.1); 
+            }
+
+            /* 購買按鈕區塊 */
+            .actions-area {
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid #eee; 
+            }
+		</style>
+	</head>
+	<body class="is-preload no-sidebar">
+		<div id="page-wrapper">
+
+			<div id="header-wrapper">
+					<header id="header" class="container">
+
+						<div id="logo">
+								<h1><a href="index.html">News</a></h1>
+							</div>
+
+						<nav id="nav">
+								<ul>
+									<li><a href="index.html">Welcome</a></li> <li>
+										<a href="#">Poppy Playtime</a>
+										<ul>
+											<li><a href="#">Huggy Wuggy</a></li>
+											<li><a href="#">Kissy Missy</a></li>
+											<li><a href="#">Poppy</a></li>
+											<li><a href="#">Mommy long Legs</a></li>
+											<li><a href="#">CatNap</a></li>
+											<li><a href="#">DogDay</a></li>
+											<li><a href="#">PickyPiggy</a></li>
+											<li><a href="#">Bobby BearHug</a></li>
+											<li><a href="#">Bubba Bubbaphant</a></li>
+											<li><a href="#">CraftyCorn</a></li>
+											<li><a href="#">Hoppy Hopscotch</a></li>
+											<li><a href="#">KickinChickin</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Five Nights at Freddy's</a>
+										<ul>
+											<li><a href="#">Freddy</a></li>
+											<li><a href="#">Bonnie</a></li>
+											<li><a href="#">Chica</a></li>
+											<li><a href="#">Foxy</a></li>
+											<li><a href="#">Golden Freddy</a></li>
+											<li><a href="#">Endo-01</a></li>
+											<li><a href="#">CatNap</a></li>
+											<li><a href="#">DogDay</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Dark Deception</a>
+										<ul>
+											<li><a href="#">Murder Monkeys</a></li>
+											<li><a href="#">Dread Duckies</a></li>
+											<li><a href="#">Reaper Nurses5</a></li>
+											<li><a href="#">Agatha</a></li>
+											<li><a href="#">Malak</a></li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+					</header>
+				</div>
+
+			<div id="main-wrapper">
+					<div class="container">
+						<div id="content">
+
+                            <div class="row">
+                                <div class="col-6 col-12-medium">
+                                    <span class="image fit product-image">
+                                        <img src="images/huggy.jpg" alt="玩偶照片" />
+                                    </span>
+                                </div>
+
+                                <div class="col-6 col-12-medium">
+                                    <section>
+                                        <header>
+                                        <h2>Huggy Wuggy (藍色擁抱者)</h2>
+                                            <p>來自 Poppy Playtime 的經典角色</p>
+                                        </header>
+
+                                        <p>這款 Huggy Wuggy 擁有極度柔軟的長手長腳，非常適合擁抱...直到你發現它不再鬆手為止。採用高品質絨毛製作，附帶永不磨滅的詭異笑容。</p>
+                                        <p><strong>注意：</strong> 請勿將其獨自留在黑暗的房間中。</p>
+
+                                        <div class="original-price">
+                                            $ 29.99 USD
+                                        </div>
+
+                                        <div class="free-price">
+                                            特價 $0 元
+                                        </div>
+
+                                        <div class="actions-area">
+                                            <a href="#" class="button large icon solid fa-shopping-cart" onclick="alert('已加入購物車... 但你有勇氣結帳嗎？')">
+                                                加進購物車
+                                            </a>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            </div>
+					</div>
+				</div>
+
+			<div id="footer-wrapper">
+					<footer id="footer" class="container">
+						<div class="row">
+							<div class="col-12">
+								<div id="copyright">
+									<ul class="menu">
+										<li>&copy; THAT COOL GUY DO THIS.</li><li>Design: <a>HUANNNN.</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</footer>
+				</div>
+
+			</div>
+
+		<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
