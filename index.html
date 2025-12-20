@@ -7,56 +7,45 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
             /* ==========================================================================
-               1. 滑動軌道核心設定 (修正版面崩壞與循環問題)
+               1. 滑動軌道設定
                ========================================================================== */
 			.sliding-wrapper {
 				overflow: hidden;
 				width: 100%;
-				position: relative; /* 讓加速按鈕可以定位 */
+				position: relative;
 			}
 
 			.sliding-track {
 				display: flex;
-				flex-wrap: nowrap !important; /* 【絕對關鍵】強制不准換行，防止變直排 */
-				width: 300%;                  /* 因為有 3 組圖，所以總寬度是 300% */
+				flex-wrap: nowrap !important; /* 強制不換行 */
+				width: 300%;                  /* 3組圖 = 300% */
 				animation: scroll-seamless 25s linear infinite; 
 			}
 
-			/* 強制設定每個格子的寬度 */
-            /* 我們有 3 組，每組 4 張，總共 12 張圖。 100% / 12 = 8.3333% */
 			.sliding-track .col-4 {
-				width: 8.3333% !important; 
+				width: 8.3333% !important; /* 12張圖平分 */
 				flex-shrink: 0;
-				padding: 0 1em; /* 左右留白 */
+				padding: 0 1em;
 			}
 
-/* --- 終極修正版：首頁滑動圖片 --- */
+			/* --- 首頁滑動圖片樣式 (卡片風) --- */
 			.sliding-track .image img {
 				display: block;
 				width: 100%;         
-				
-				/* 1. 關鍵修改：高度加倍！給玩偶足夠的空間站起來 */
-				height: 200px;       
-				
-				/* 2. 關鍵修改：使用 contain 讓整隻玩偶都看得到，絕對不切頭 */
-				object-fit: cover; 
-				
-				
-				/* 3. 卡片風格：白色背景 + 內縮一點點 */
-				background-color: #ffffff; 
-				padding: 10px;       
-				
-				/* 4. 讓玩偶乖乖站在正中間 */
-				object-position: top center;
+				height: 350px;       /* 高度固定 350px */
+				object-fit: contain; /* 完整顯示全身 */
+				background-color: #ffffff; /* 白底 */
+				padding: 15px;       /* 內縮留白 */
+				object-position: center;
+                border-radius: 8px;
 			}
 
-			/* 讓格子瘦身，去除多餘留白 */
+			/* 讓格子瘦身 */
 			.sliding-track .box.feature .inner {
 				padding: 1em 1em 1.5em 1em !important; 
 				min-height: auto; 
 			}
             
-            /* 移除 box 底部的預設留白 */
             .box.feature.no-padding-bottom {
                 margin-bottom: 0;
                 padding-bottom: 0;
@@ -65,33 +54,19 @@
             }
             .image.featured { margin: 0 !important; }
 
-			/* 縮小文字，讓小格子看起來協調 */
-			.sliding-track .box.feature h2 {
-				font-size: 1.1em !important; 
-				margin-bottom: 0.2em;        
-			}
-			.sliding-track .box.feature p {
-				font-size: 0.85em !important; 
-				margin-bottom: 0.5em;         
-			}
+			.sliding-track .box.feature h2 { font-size: 1.1em !important; margin-bottom: 0.2em; }
+			.sliding-track .box.feature p { font-size: 0.85em !important; margin-bottom: 0.5em; }
 
-            /* ==========================================================================
-               3. 動畫邏輯 (無縫循環)
-               ========================================================================== */
-            /* 讓圖片往右跑：從 "第2組"(-33.33%) 的位置 滑到 "第1組"(0%) */
-            /* 因為第1組和第2組長得一模一樣，所以跳回去時眼睛看不出來 */
+            /* --- 動畫邏輯 --- */
 			@keyframes scroll-seamless {
 				0% { transform: translateX(-33.33%); } 
 				100% { transform: translateX(0); }     
 			}
 
-			/* 滑鼠移上去時暫停 */
-			.sliding-track:hover {
-				animation-play-state: paused;
-			}
+			.sliding-track:hover { animation-play-state: paused; }
 
             /* ==========================================================================
-               4. 加速按鈕樣式
+               2. 加速按鈕樣式
                ========================================================================== */
 			.nav-arrow {
 				position: absolute;
@@ -110,10 +85,56 @@
 				font-size: 1.2em;
 			}
 			.nav-arrow:hover { background: rgba(255, 0, 0, 0.8); }
-			.right-arrow { right: 10px; } /* 固定在右邊 */
+			.right-arrow { right: 10px; }
 
             /* ==========================================================================
-               5. 其他頁面樣式 (側邊欄、隱藏文字等)
+               3. YouTube 影片專用樣式 (新增部分)
+               ========================================================================== */
+            .video-container {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 黃金比例 */
+                height: 0;
+                overflow: hidden;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                background: #000; /* 影片讀取前顯示黑底 */
+                margin-bottom: 10px;
+            }
+
+            .video-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+
+            .video-title {
+                text-align: center;
+                font-weight: bold;
+                margin-top: 0.5em;
+                margin-bottom: 2em;
+            }
+
+            /* 分隔線與標題 */
+            .section-divider {
+                border-top: 2px solid #eee;
+                margin: 3em 0 2em 0;
+                text-align: center;
+            }
+            .section-divider h2 {
+                background: #fff;
+                display: inline-block;
+                padding: 0 1em;
+                position: relative;
+                top: -1.6em; /* 讓標題壓在線上 */
+                color: #d63031;
+                font-weight: 800;
+            }
+
+            /* ==========================================================================
+               4. 其他樣式
                ========================================================================== */
 			.widget.thumbnails .image img {
 				width: 100%;
@@ -121,27 +142,13 @@
 				object-fit: cover;
 				object-position: top;
 			}
-			.scary-text {
-				color: black; background-color: black; display: inline-block; padding: 0 5px;
-			}
-			.scary-text::selection {
-				color: #ff0000; background-color: black;
-			}
-			.scary-text::-moz-selection {
-				color: #ff0000; background-color: black;
-			}
-			/* 圖片設定：改成「完整顯示」並加上「強制白底」 */
+			.scary-text { color: black; background-color: black; display: inline-block; padding: 0 5px; }
+			.scary-text::selection { color: #ff0000; background-color: black; }
+			.scary-text::-moz-selection { color: #ff0000; background-color: black; }
+            
+            /* 角色頁面圖片設定 (避免衝突) */
             .char-image img {
-                width: 100%;
-                height: 350px;       /* 高度固定 */
-                
-                /* --- 關鍵修改 --- */
-                object-fit: contain; /* 改成 contain：讓玩偶完整縮小塞進去，不會被切頭，旁邊自動留白 */
-                background-color: #ffffff; /* 強制背景要是純白色 (這樣透明PNG也會有白底) */
-                padding: 20px;       /* (選用) 讓玩偶縮進去一點，不要頂到邊邊，看起來更有質感 */
-                
-                object-position: center; /* 讓玩偶置中 */
-                border-radius: 6px 6px 0 0; 
+                width: 100%; height: 350px; object-fit: contain; background-color: #ffffff; padding: 20px; object-position: center; border-radius: 6px 6px 0 0; 
             }
 		</style>
 	</head>
@@ -150,11 +157,9 @@
 
 			<div id="header-wrapper">
 					<header id="header" class="container">
-
 						<div id="logo">
 								<h1><a href="index.html">News</a></h1>
 							</div>
-
 						<nav id="nav">
 								<ul>
 									<li class="current"><a href="index.html">Welcome</a></li>
@@ -198,7 +203,6 @@
 									</li>
 								</ul>
 							</nav>
-
 					</header>
 				</div>
 
@@ -232,49 +236,34 @@
 								<section class="box feature no-padding-bottom">
                                     <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
 									<div class="inner">
-										<header>
-											<h2>Smiling Critters</h2>
-											<p>Ohhh look at that cuteeeee animals !!</p>
-										</header>
+										<header><h2>Smiling Critters</h2><p>Ohhh look at that cuteeeee animals !!</p></header>
 										<p>Shhhhhhh.</p>
 									</div>
 								</section>
 							</div>
-
-                            <div class="col-4 col-12-medium">
+							<div class="col-4 col-12-medium">
 								<section class="box feature no-padding-bottom">
 									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
 									<div class="inner">
-										<header>
-											<h2>Huggy Wuggy</h2>
-											<p>PLS Huggg me !!</p>
-										</header>
+										<header><h2>Huggy Wuggy</h2><p>PLS Huggg me !!</p></header>
 										<p>Becare for the sharp teeth.</p>
 									</div>
 								</section>
 							</div>
-
-                            <div class="col-4 col-12-medium">
+							<div class="col-4 col-12-medium">
 								<section class="box feature no-padding-bottom">
 									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
 									<div class="inner">
-										<header>
-											<h2>Oh, that's chica...</h2>
-											<p>You want some cake?</p>
-										</header>
+										<header><h2>Oh, that's chica...</h2><p>You want some cake?</p></header>
 										<p>Sayyyy YESSSSssssss...</p>
 									</div>
 								</section>
 							</div>
-
                             <div class="col-4 col-12-medium">
 								<section class="box feature no-padding-bottom">
 									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
 									<div class="inner">
-										<header>
-											<h2>Caution the needle...</h2>
-											<p>Don't afraid...</p>
-										</header>
+										<header><h2>Caution the needle...</h2><p>Don't afraid...</p></header>
 										<p>Just a beautiful nurse...</p>
 									</div>
 								</section>
@@ -284,10 +273,7 @@
 								<section class="box feature no-padding-bottom">
                                     <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
 									<div class="inner">
-										<header>
-											<h2>Smiling Critters</h2>
-											<p>Ohhh look at that cuteeeee animals !!</p>
-										</header>
+										<header><h2>Smiling Critters</h2><p>Ohhh look at that cuteeeee animals !!</p></header>
 										<p>Shhhhhhh.</p>
 									</div>
 								</section>
@@ -296,10 +282,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
 									<div class="inner">
-										<header>
-											<h2>Huggy Wuggy</h2>
-											<p>PLS Huggg me !!</p>
-										</header>
+										<header><h2>Huggy Wuggy</h2><p>PLS Huggg me !!</p></header>
 										<p>Becare for the sharp teeth.</p>
 									</div>
 								</section>
@@ -308,10 +291,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
 									<div class="inner">
-										<header>
-											<h2>Oh, that's chica...</h2>
-											<p>You want some cake?</p>
-										</header>
+										<header><h2>Oh, that's chica...</h2><p>You want some cake?</p></header>
 										<p>Sayyyy YESSSSssssss...</p>
 									</div>
 								</section>
@@ -320,10 +300,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
 									<div class="inner">
-										<header>
-											<h2>Caution the needle...</h2>
-											<p>Don't afraid...</p>
-										</header>
+										<header><h2>Caution the needle...</h2><p>Don't afraid...</p></header>
 										<p>Just a beautiful nurse...</p>
 									</div>
 								</section>
@@ -333,10 +310,7 @@
 								<section class="box feature no-padding-bottom">
                                     <a href="#" class="image featured" target="_blank"><img src="images/anmals.jpg" alt="Animals" /></a>
 									<div class="inner">
-										<header>
-											<h2>Smiling Critters</h2>
-											<p>Ohhh look at that cuteeeee animals !!</p>
-										</header>
+										<header><h2>Smiling Critters</h2><p>Ohhh look at that cuteeeee animals !!</p></header>
 										<p>Shhhhhhh.</p>
 									</div>
 								</section>
@@ -345,10 +319,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="buy huggy.html" class="image featured" target="_blank"><img src="images/huggy.jpg" alt="Huggy" /></a>
 									<div class="inner">
-										<header>
-											<h2>Huggy Wuggy</h2>
-											<p>PLS Huggg me !!</p>
-										</header>
+										<header><h2>Huggy Wuggy</h2><p>PLS Huggg me !!</p></header>
 										<p>Becare for the sharp teeth.</p>
 									</div>
 								</section>
@@ -357,10 +328,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="#" class="image featured" target="_blank"><img src="images/FNaF-Chica-Character.png" alt="Chica" /></a>
 									<div class="inner">
-										<header>
-											<h2>Oh, that's chica...</h2>
-											<p>You want some cake?</p>
-										</header>
+										<header><h2>Oh, that's chica...</h2><p>You want some cake?</p></header>
 										<p>Sayyyy YESSSSssssss...</p>
 									</div>
 								</section>
@@ -369,10 +337,7 @@
 								<section class="box feature no-padding-bottom">
 									<a href="buy nurrse.html" class="image featured" target="_blank"><img src="images/Reaper_NurseHD.jpg" alt="Nurse" /></a>
 									<div class="inner">
-										<header>
-											<h2>Caution the needle...</h2>
-											<p>Don't afraid...</p>
-										</header>
+										<header><h2>Caution the needle...</h2><p>Don't afraid...</p></header>
 										<p>Just a beautiful nurse...</p>
 									</div>
 								</section>
@@ -384,7 +349,8 @@
 
 			<div id="main-wrapper">
 					<div class="container">
-						<div class="row gtr-200">
+						
+                        <div class="row gtr-200">
 							<div class="col-4 col-12-medium">
 
 								<div id="sidebar">
@@ -417,14 +383,40 @@
 
 							</div>
 						</div>
-					</div>
+
+                        <div class="section-divider">
+                            <h2>精選影片</h2>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4 col-12-medium">
+                                <div class="video-container">
+									<iframe src="https://www.youtube.com/embed/uRgrr37dVzU" allowfullscreen></iframe>
+								</div>
+								<p class="video-title">Poppy Playtime Full Game</p>
+                            </div>
+
+                            <div class="col-4 col-12-medium">
+                                <div class="video-container">
+                                    <iframe src="https://www.youtube.com/embed/0VC1CfoAilc" allowfullscreen></iframe>
+                                </div>
+                                <p class="video-title">Five Nights at Freddy’s  Full Game</p>
+                            </div>
+
+                            <div class="col-4 col-12-medium">
+                                <div class="video-container">
+                                    <iframe src="https://www.youtube.com/embed/Gcxq7VkLxKc" allowfullscreen></iframe>
+                                </div>
+                                <p class="video-title">Dark Deception Full Game</p>
+                            </div>
+                        </div>
+                        </div>
 				</div>
 
 			<div id="footer-wrapper">
 					<footer id="footer" class="container">
 						<div class="row">
 							<div class="col-3 col-6-medium col-12-small">
-
 								<section class="widget links">
 										<h3>合作公司</h3>
 										<ul class="style2">
@@ -433,10 +425,8 @@
 											<li><a href="https://dark-deception-game.fandom.com/wiki/Dark_Deception_Wiki">Dark Deception</a></li>
 										</ul>
 									</section>
-
 							</div>
 							<div class="col-3 col-6-medium col-12-small">
-
 								<section class="widget links">
 										<h3>網頁製作者</h3>
 										<ul class="style2">
@@ -444,13 +434,10 @@
 											<li><a href="https://xd-oxo.github.io/finish/">和他的腦袋</a></li>
 											<li><a href="https://xd-oxo.github.io/finish/">和喜歡的遊戲</a></li>
 											<li><a href="https://xd-oxo.github.io/finish/">和想推薦大家遊玩的心</a></li>
-											<li><a href="#">哈哈其實我哪一款都不敢玩QQ</a></li>
 										</ul>
 									</section>
-
 							</div>
 							<div class="col-3 col-6-medium col-12-small">
-
 								<section class="widget links">
 										<h3>事實上能購買的是</h3>
 										<ul class="style2">
@@ -461,10 +448,8 @@
 											<li><a href="#">一定要點加進購物車看看彈窗!!</a></li>
 										</ul>
 									</section>
-
 							</div>
 							<div class="col-3 col-6-medium col-12-small">
-
 								<section class="widget contact last">
 										<h3>聯絡我們</h3>
 										<ul>
@@ -478,7 +463,6 @@
 										Arcadia, TW 9999999<br />
 										(08) 24696303</p>
 									</section>
-
 							</div>
 						</div>
 						<div class="row">
@@ -492,7 +476,6 @@
 						</div>
 					</footer>
 				</div>
-
 			</div>
 
 		<script src="assets/js/jquery.min.js"></script>
@@ -502,20 +485,15 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
             
-<script>
+            <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     const track = document.querySelector('.sliding-track');
                     const btnFast = document.getElementById('btn-fast');
 
-                    // 檢查元素是否存在
                     if (btnFast && track) {
-                        
-                        // 定義加速與恢復的函式
                         function speedUp() {
-                            // 抓取軌道上目前正在跑的所有動畫
                             const animations = track.getAnimations();
                             animations.forEach(animation => {
-                                // 將播放速率改成 5 倍速 (原本是 1)
                                 animation.updatePlaybackRate(5); 
                             });
                         }
@@ -523,22 +501,16 @@
                         function slowDown() {
                             const animations = track.getAnimations();
                             animations.forEach(animation => {
-                                // 將播放速率改回 1 倍速 (正常速度)
                                 animation.updatePlaybackRate(1); 
                             });
                         }
 
-                        // === 綁定滑鼠事件 ===
-                        // 滑鼠按住 -> 加速
                         btnFast.addEventListener('mousedown', speedUp);
-                        // 滑鼠放開 -> 恢復
                         btnFast.addEventListener('mouseup', slowDown);
-                        // 滑鼠移開 -> 恢復 (避免卡住)
                         btnFast.addEventListener('mouseleave', slowDown);
                         
-                        // === 綁定手機觸控事件 ===
                         btnFast.addEventListener('touchstart', function(e) {
-                            e.preventDefault(); // 防止手機長按跳出選單
+                            e.preventDefault(); 
                             speedUp();
                         });
                         btnFast.addEventListener('touchend', slowDown);
