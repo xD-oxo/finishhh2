@@ -6,6 +6,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
+			/* ============================================== */
+            /* 自訂滑鼠游標設定                 */
+            /* ============================================== */
+            
+            /* 1. 設定「一般狀態」的滑鼠 */
+            html, body {
+                /* url('路徑') 是你的圖片，auto 是備用(如果圖跑不出來就用預設) */
+                cursor: url('images/nor.png'), auto; 
+            }
+
+            /* 2. 設定「移到連結上」的滑鼠 (例如變更手指或變紅色) */
+            /* 如果你想要連結也有不同圖案，可以準備另一張 cursor-hover.png */
+            a, button, .button, .image, .nav-arrow {
+                cursor: url('images/tou.png'), pointer; /* 這裡可以換成另一張圖 */
+            }
             /* ==========================================================================
                1. 滑動軌道設定
                ========================================================================== */
@@ -456,7 +471,7 @@
 											<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
 											<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
 											<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-											<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+											<li><a href="https://maps.app.goo.gl/ZJDwQcRcDF2ENzak7" class="icon solid fa-map-marker-alt"><span class="label">Map</span></a></li>
 											<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
 										</ul>
 										<p>666 Road<br />
@@ -514,6 +529,35 @@
                             speedUp();
                         });
                         btnFast.addEventListener('touchend', slowDown);
+                    }
+                });
+            </script>
+
+			<audio id="bgm" loop>
+                <source src="喵喵 BGM.mp3" type="audio/mpeg">
+            </audio>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var audio = document.getElementById("bgm");
+                    
+                    // 設定音量 (0.0 ~ 1.0)，建議設小聲一點當背景，才不會吵死人
+                    audio.volume = 0.1; 
+
+                    // 嘗試自動播放
+                    var playPromise = audio.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            // 如果運氣好，瀏覽器允許，就會直接播放
+                            console.log("BGM started automatically.");
+                        }).catch(error => {
+                            // 如果被擋住 (通常都會被擋)，就等待使用者點擊任何地方才開始播
+                            console.log("Autoplay prevented. Waiting for user interaction.");
+                            document.addEventListener('click', function() {
+                                audio.play();
+                            }, { once: true }); // 確保只執行一次，不會一直重複
+                        });
                     }
                 });
             </script>
