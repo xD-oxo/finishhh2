@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
+			
 			/* ============================================== */
             /* 自訂滑鼠游標設定                 */
             /* ============================================== */
@@ -165,6 +166,22 @@
             .char-image img {
                 width: 100%; height: 350px; object-fit: contain; background-color: #ffffff; padding: 20px; object-position: center; border-radius: 6px 6px 0 0; 
             }
+			/* 定義故障動畫 */
+			@keyframes glitch-anim {
+				0% { transform: translate(0); }
+				20% { transform: translate(-2px, 2px); }
+				40% { transform: translate(-2px, -2px); }
+				60% { transform: translate(2px, 2px); }
+				80% { transform: translate(2px, -2px); }
+				100% { transform: translate(0); }
+			}
+
+			/* 套用到特定文字的 class */
+			.glitch-text:hover {
+				animation: glitch-anim 0.3s infinite; /* 滑鼠移上去時開始閃爍 */
+				color: red !important; /* 變成紅色 */
+				text-shadow: 2px 2px 0px #000; /* 加上錯位陰影 */
+			}
 		</style>
 	</head>
 	<body class="is-preload homepage">
@@ -225,7 +242,7 @@
 					<div id="banner" class="box container">
 						<div class="row">
 							<div class="col-7 col-12-medium">
-								<h2>Hi 歡迎到玩偶店</h2>
+								<h2 class="glitch-text">Hi 歡迎到玩偶店</h2>
 								<p style="font-size: 1.5em;">這是一間以領養代替購買的玩偶網站。</p>
 							</div>
 							<div class="col-5 col-12-medium">
@@ -531,6 +548,7 @@
                         btnFast.addEventListener('touchend', slowDown);
                     }
                 });
+				
             </script>
 
 			<audio id="bgm" loop>
@@ -561,5 +579,30 @@
                     }
                 });
             </script>
+			<audio id="sound-hover" src="images/hover.mp3"></audio>
+			<audio id="sound-click" src="images/click.mp3"></audio>
+
+			<script>
+				// 抓取所有的按鈕和連結
+				const buttons = document.querySelectorAll("a, button, .button, .nav-arrow");
+				const hoverSound = document.getElementById("sound-hover");
+				const clickSound = document.getElementById("sound-click");
+
+				buttons.forEach(btn => {
+					// 滑鼠移過去播放 (音量設小一點以免太吵)
+					btn.addEventListener("mouseenter", () => {
+						hoverSound.currentTime = 0; // 重置音效
+						hoverSound.volume = 0.2;    // 音量 20%
+						hoverSound.play().catch(() => {}); // 忽略錯誤
+					});
+
+					// 點擊時播放
+					btn.addEventListener("click", () => {
+						clickSound.currentTime = 0;
+						clickSound.volume = 0.5;
+						clickSound.play().catch(() => {});
+					});
+				});
+			</script>
 	</body>
 </html>
